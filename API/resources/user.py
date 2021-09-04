@@ -25,6 +25,7 @@ class User(Resource):
 
 
 class UserRegister(Resource):
+    print("first register")
     parser = reqparse.RequestParser()
     parser.add_argument('username', type=str, required=True, help="user must have user name.")
     parser.add_argument('password', type=str, required=True, help="user must have password.")
