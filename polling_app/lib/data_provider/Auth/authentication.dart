@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 class AuthenticationDataProvider {
 
 
-
   Future<User> register(User user) async {
     final http.Response response = await http.post(Uri.parse('http://127.0.0.1:5000/api/v1/users/register'),
         headers: <String, String>{"Content-Type": "application/json"},

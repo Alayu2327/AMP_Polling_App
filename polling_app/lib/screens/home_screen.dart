@@ -1,6 +1,7 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:polling_app/models/polling.dart';
 import 'package:polling_app/routes/routes.dart';
 
 // ignore: must_be_immutable

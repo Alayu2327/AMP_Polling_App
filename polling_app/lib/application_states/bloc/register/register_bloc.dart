@@ -19,10 +19,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         final user = event.user;
         User newuser = await authenticationRepository.register(user);
         print(newuser.tojson());
-        var response = newuser.tojson();
-        if (response['emailAddress'] == '') {
+        var incommingValue = newuser.tojson();
+        if (incommingValue['emailAddress'] == '') {
           yield FailedToRegister();
-        } else if (response['emailAddress'] != '') {
+        } else if (incommingValue['emailAddress'] != '') {
           yield Registered(newuser);
         }
       } catch (e) {
