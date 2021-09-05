@@ -14,7 +14,10 @@ class PollModel(db.Model):
     starting_date = db.Column(db.String(15))
     deadline = db.Column(db.String(15))
 
+    candidates = db.relationship("CandidateModel",backref="poll")
+
     owner_id = db.Column(db.Integer, db.ForeignKey('users._id'))
+
     # user = db.relationship('UserModel')
 
     # def __init__(self, name, price, store_id):
@@ -64,5 +67,6 @@ class PollModel(db.Model):
             'description': self.description,
             'starting_date': self.starting_date,
             'deadline': self.deadline,
+            'candidates': self.candidates
             "owner_id": self.owner_id
          }

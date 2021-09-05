@@ -41,5 +41,6 @@ class UserModel(db.Model):
             "id" : self._id,
             "username" : self.username,
             "email" : self.email,
-            "phone_number" :self.phone_number
+            "phone_number" :self.phone_number,
+            "polls": self.polls
         }
