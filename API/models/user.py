@@ -42,5 +42,5 @@ class UserModel(db.Model):
             "username" : self.username,
             "email" : self.email,
             "phone_number" :self.phone_number,
-            "polls": self.polls
+            "polls": list(map(lambda x: x.json(), self.polls))
         }

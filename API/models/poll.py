@@ -1,6 +1,6 @@
 from db import db
 
-
+ 
 
 class PollModel(db.Model):
     __tablename__ = 'polls'
@@ -36,6 +36,13 @@ class PollModel(db.Model):
     def find_by_id(cls, id):
         return cls.query.filter_by(_id=id).first()
 
+
+    @classmethod
+    def find_poll_by_user(cls, id):
+        polls = cls.query.filter_by(owner_id=id).all()
+        return {'polls': list(map(lambda x: x.json(), polls))}
+
+
     @classmethod
     def search_by_keyword(cls, keyword):
         houses = cls.query.filter_by(location_word=keyword).all()
@@ -67,6 +74,6 @@ class PollModel(db.Model):
             'description': self.description,
             'starting_date': self.starting_date,
             'deadline': self.deadline,
-            'candidates': self.candidates
+            'candidates': list(map(lambda x: x.json(), self.candidates)),
             "owner_id": self.owner_id
          }

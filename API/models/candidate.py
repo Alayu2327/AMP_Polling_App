@@ -9,9 +9,9 @@ class CandidateModel(db.Model):
     name = db.Column(db.String(80))
     # image_cover = db.Column(db.String(200))
     description = db.Column(db.String(200))
-    vote_result = db.Column(db.Integer)
+    vote_result = db.Column(db.Integer, default=0)
 
-    poll_id = db.Column(db.Integer, db.ForeignKey('poll._id'))
+    poll_id = db.Column(db.Integer, db.ForeignKey('polls._id'))
     
 
     def save_to_db(self):
@@ -25,6 +25,15 @@ class CandidateModel(db.Model):
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(_id=id).first()
+
+    @classmethod
+    def get_vote(cls, id):
+        candidate = cls.query.filter_by(_id=id).first()
+        candidate.vote_result += 1
+        db.session.add(candidate)
+        db.session.commit()
+        print(candidate.json())
+        return candidate.json()
 
     @classmethod
     def search_by_keyword(cls, keyword):

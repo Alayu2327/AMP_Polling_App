@@ -8,7 +8,7 @@ import json
 from flask_jwt_extended import jwt_required
 from random import randint
 
-
+ 
 class Poll(Resource):
 
     parser = reqparse.RequestParser()
@@ -105,7 +105,11 @@ class PollList(Resource):
         # return item.json(), 201
 
 
-
+class UsersPoll(Resource):
+    def get(self, id):
+        print(id)
+        polls = PollModel.find_poll_by_user(id)
+        return polls
 class Search_by_keyword(Resource):
     def get(self, keyword):
         print(keyword)
