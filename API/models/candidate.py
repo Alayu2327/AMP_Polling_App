@@ -1,5 +1,5 @@
 from db import db
-
+from models.validPollers import ValidPollerModel
 
 
 class CandidateModel(db.Model):
@@ -27,13 +27,26 @@ class CandidateModel(db.Model):
         return cls.query.filter_by(_id=id).first()
 
     @classmethod
-    def get_vote(cls, id):
-        candidate = cls.query.filter_by(_id=id).first()
-        candidate.vote_result += 1
-        db.session.add(candidate)
-        db.session.commit()
-        print(candidate.json())
-        return candidate.json()
+    def get_vote(cls, candidate_id, user_id, poll_id):
+
+        if (not ValidPollerModel.has_a_user_voted(user_id, poll_id)) and ValidPollerModel.can_vote(user_id, poll_id):
+
+            candidate = cls.query.filter_by(_id=candidate_id).first()
+            candidate.vote_result += 1
+            db.session.add(candidate)
+            db.session.commit()
+
+
+            valid_poller_obj = ValidPollerModel(poll_id=poll_id, user_id=user_id, has_voted=True)
+            valid_poller_obj.save_to_db()
+
+            print(candidate.json())
+            return candidate.json()
+
+        return {
+            "status": "failed",
+            "message": "you can not vote"
+        }
 
     @classmethod
     def search_by_keyword(cls, keyword):

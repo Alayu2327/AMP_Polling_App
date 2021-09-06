@@ -76,7 +76,6 @@ class CandidateList(Resource):
         data = parser.parse_args()
         print({**data})
 
-
         new_candidate = CandidateModel(**data)
 
 
@@ -100,13 +99,18 @@ class GivePoll(Resource):
     parser = reqparse.RequestParser()
 
     @jwt_required()
-    def post(self, id):
+    def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('candidate_id', type=int, required=True, help="A candidate id is required to vote!!")
+        parser.add_argument('poll_id', type=int, required=True, help="To vote you need the poll id")
+        parser.add_argument('user_id', type=int, required=True, help="To vote you need the user id")
+
         data = parser.parse_args()
         candidate_id = data['candidate_id']
+        user_id = data['user_id']
+        poll_id = data['poll_id']
 
-        return CandidateModel.get_vote(candidate_id)
+        return CandidateModel.get_vote(candidate_id, user_id, poll_id)
 
 
 class Search_by_keyword(Resource):

@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager
 from resources.user import UserRegister, UserLogin, ChangePassword, UserLogout, User
 from resources.poll import Poll, PollList, Search_by_keyword, UsersPoll
 from resources.candidate import Candidate, CandidateList, GivePoll
+from resources.validPollers import CanVote, HasVoted, PrivateVoter
 from flask_cors import CORS
 
  
@@ -58,7 +59,12 @@ def creds(response):
 api.add_resource(Poll, '/api/v1/polls/<id>')
 api.add_resource(PollList, '/api/v1/polls')
 api.add_resource(UsersPoll, '/api/v1/users/<id>/polls')
-api.add_resource(GivePoll, '/api/v1/vote/poll/<id>/')
+api.add_resource(GivePoll, '/api/v1/vote')
+api.add_resource(PrivateVoter, '/api/v1/privatevoter')
+
+api.add_resource(CanVote, '/api/v1/canvote/user/<user_id>/poll/<poll_id>')
+api.add_resource(HasVoted, '/api/v1/hasvoted/user/<user_id>/poll/<poll_id>')
+
 
 api.add_resource(Candidate, '/api/v1/candidates/<id>')
 api.add_resource(CandidateList, '/api/v1/candidates')
