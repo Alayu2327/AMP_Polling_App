@@ -6,7 +6,7 @@ from models.complaint import ComplaintModel
 from models.user import UserModel
 import json
 from flask_jwt_extended import jwt_required
-
+from db import db
 
 class Complaint(Resource):
 
@@ -33,27 +33,32 @@ class Complaint(Resource):
         return {'message': 'complaint id is invalid.'}, 404
 
     def put(self, id):
-        
         parser = reqparse.RequestParser()
+        
+        parser.add_argument('content', type=str)
+        
+        data = parser.parse_args()
+        print({**data})
 
-        poll = PollModel.find_by_id(id)
-        # print(data)
+        for key in list(data):
+            if data[key] == None:
+                del data[key]
+        print({**data})
 
-        # for row in data.keys():s
-        #     if data[row] = None:
-        #         print (row, data[row])
-        #     else:
-        #         house.
 
-        # if house:
-        #     HouseModel.update_by_id(id, data)
+        current_complaint = ComplaintModel.find_by_id(id)
+        if current_complaint:
+            current_complaint = ComplaintModel.query.filter_by(_id=id).update(data)
 
-        #     return{
-        #         'status': 'success',
-        #         'data': house.json()
-        #     }
+            # current_complaint.save_to_db()
+            db.session.commit()
+            current_complaint = ComplaintModel.find_by_id(id)
 
-        return {'message': 'poll id is invalid.'}, 404
+            return current_complaint.json()
+
+        return {'message': 'complaint id is invalid.'}, 404
+
+
 
 
 

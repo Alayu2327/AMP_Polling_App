@@ -6,7 +6,7 @@ from models.candidate import CandidateModel
 from models.user import UserModel
 import json
 from flask_jwt_extended import jwt_required
-
+from db import db
 
 class Candidate(Resource):
 
@@ -34,27 +34,31 @@ class Candidate(Resource):
         return {'message': 'candidate id is invalid.'}, 404
 
     def put(self, id):
+        parser = reqparse.RequestParser()
         
-        data = Poll.parser.parse_args()
+        parser.add_argument('name', type=str)
+        parser.add_argument('poll_id', type=int)
+        parser.add_argument('description', type=str)
+        data = parser.parse_args()
+        print({**data})
 
-        poll = PollModel.find_by_id(id)
-        # print(data)
+        for key in list(data):
+            if data[key] == None:
+                del data[key]
+        print({**data})
 
-        # for row in data.keys():s
-        #     if data[row] = None:
-        #         print (row, data[row])
-        #     else:
-        #         house.
 
-        # if house:
-        #     HouseModel.update_by_id(id, data)
+        current_candidate = CandidateModel.find_by_id(id)
+        if current_candidate:
+            current_candidate = CandidateModel.query.filter_by(_id=id).update(data)
 
-        #     return{
-        #         'status': 'success',
-        #         'data': house.json()
-        #     }
+            # current_candidate.save_to_db()
+            db.session.commit()
+            current_candidate = CandidateModel.find_by_id(id)
 
-        return {'message': 'poll id is invalid.'}, 404
+            return current_candidate.json()
+
+        return {'message': 'candidate id is invalid.'}, 404 
 
 
 

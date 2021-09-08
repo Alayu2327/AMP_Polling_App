@@ -7,8 +7,18 @@ from models.user import UserModel
 import json
 from flask_jwt_extended import jwt_required
 from random import randint
+from db import db
 
- 
+class GetPollBySecretkey(Resource):
+    def get(self, secretkey):
+        poll = PollModel.find_by_secretkey(secretkey)
+        if poll:
+            return poll.json()
+        return {
+            'status': 'failed',
+            'message': 'poll not found with that secret key'}, 400
+
+
 class Poll(Resource):
 
     parser = reqparse.RequestParser()
@@ -38,25 +48,33 @@ class Poll(Resource):
         return {'message': 'poll id is invalid.'}, 404
 
     def put(self, id):
+        parser = reqparse.RequestParser()
         
-        data = Poll.parser.parse_args()
+        parser.add_argument('title', type=str)
+        parser.add_argument('is_public', type=bool)
+        # parser.add_argument('image_cover')
+        parser.add_argument('starting_date', type=str)
+        parser.add_argument('deadline', type=str)
+        parser.add_argument('description', type=str)
+        parser.add_argument('poll_secret_key', type=str)
+        data = parser.parse_args()
+        print({**data})
 
-        poll = PollModel.find_by_id(id)
-        # print(data)
+        for key in list(data):
+            if data[key] == None:
+                del data[key]
+        print({**data})
 
-        # for row in data.keys():s
-        #     if data[row] = None:
-        #         print (row, data[row])
-        #     else:
-        #         house.
 
-        # if house:
-        #     HouseModel.update_by_id(id, data)
+        current_poll = PollModel.find_by_id(id)
+        if current_poll:
+            current_poll = PollModel.query.filter_by(_id=id).update(data)
 
-        #     return{
-        #         'status': 'success',
-        #         'data': house.json()
-        #     }
+            # current_poll.save_to_db()
+            db.session.commit()
+            current_poll = PollModel.find_by_id(id)
+
+            return current_poll.json()
 
         return {'message': 'poll id is invalid.'}, 404
 
@@ -71,7 +89,7 @@ class PollList(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         
-
+        parser.add_argument('owner_id', type=int)
         parser.add_argument('title', type=str, required=True, help="A poll must have a title!!")
         parser.add_argument('is_public', type=bool)
         # parser.add_argument('image_cover')
@@ -83,17 +101,17 @@ class PollList(Resource):
         print({**data})
 
 
-        current_user = UserModel.find_by_id(int(get_jwt_identity()))
+        # current_user = UserModel.find_by_id(int(get_jwt_identity()))
         new_poll_secret_key = randint(100000, 999999)
 
         repeated = True
         while(repeated):
-            while(PollModel.query.filter_by(secret_key=new_poll_secret_key).first()):
+            while(PollModel.query.filter_by(poll_secret_key=new_poll_secret_key).first()):
                 new_poll_secret_key = randint(100000, 999999)
-                
+
             repeated = False
 
-        new_poll = PollModel(**data,owner=current_user, poll_secret_key=new_poll_secret_key)
+        new_poll = PollModel(**data, poll_secret_key=new_poll_secret_key)
 
 
         # try:

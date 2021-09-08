@@ -35,22 +35,15 @@ class PollModel(db.Model):
     def find_by_id(cls, id):
         return cls.query.filter_by(_id=id).first()
 
+    @classmethod
+    def find_by_secretkey(cls, secretkey):
+        return cls.query.filter_by(poll_secret_key=secretkey).first()
+
 
     @classmethod
     def find_poll_by_user(cls, id):
         polls = cls.query.filter_by(owner_id=id).all()
         return {'polls': list(map(lambda x: x.json(), polls))}
-
-
-    # @classmethod
-    # def search_by_keyword(cls, keyword):
-    #     houses = cls.query.filter_by(location_word=keyword).all()
-                # print(found_houses)
-        # for house in found_houses:
-        #     print("house.location_word")
-        # return {'houses': list(map(lambda x: x.json(), houses))}
-
-
 
 
 
