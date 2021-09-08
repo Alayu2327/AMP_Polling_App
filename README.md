@@ -12,5 +12,4 @@ is an online polling app which uses flask to build backend API and flutter for f
     1. Biruk kassaw atr/2802/11
     2. Deginet haile atr/1789/11
     3. Alayu Estifanos  ATR/7067/11
-    4. Gedle kiristos Teklu atr/9087/11
     5. Kaleb admasun Atr/8136/11
