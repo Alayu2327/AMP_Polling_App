@@ -6,9 +6,10 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from resources.user import UserRegister, UserLogin, ChangePassword, UserLogout, User
-from resources.poll import Poll, PollList, Search_by_keyword, UsersPoll
+from resources.poll import Poll, PollList, Search_by_keyword, UsersPoll, GetPollBySecretkey
 from resources.candidate import Candidate, CandidateList, GivePoll
 from resources.validPollers import CanVote, HasVoted, PrivateVoter
+from resources.complaint import Complaint, ComplaintList
 from flask_cors import CORS
 
  
@@ -61,6 +62,7 @@ api.add_resource(PollList, '/api/v1/polls')
 api.add_resource(UsersPoll, '/api/v1/users/<id>/polls')
 api.add_resource(GivePoll, '/api/v1/vote')
 api.add_resource(PrivateVoter, '/api/v1/privatevoter')
+api.add_resource(GetPollBySecretkey, '/api/v1/polls/secretkey/<secretkey>')
 
 api.add_resource(CanVote, '/api/v1/canvote/user/<user_id>/poll/<poll_id>')
 api.add_resource(HasVoted, '/api/v1/hasvoted/user/<user_id>/poll/<poll_id>')
@@ -68,6 +70,9 @@ api.add_resource(HasVoted, '/api/v1/hasvoted/user/<user_id>/poll/<poll_id>')
 
 api.add_resource(Candidate, '/api/v1/candidates/<id>')
 api.add_resource(CandidateList, '/api/v1/candidates')
+
+api.add_resource(Complaint, '/api/v1/complaints/<id>')
+api.add_resource(ComplaintList, '/api/v1/complaints')
 
 api.add_resource(UserRegister, '/api/v1/users/register')
 api.add_resource(UserLogin, '/api/v1/users/login')

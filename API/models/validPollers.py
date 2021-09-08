@@ -30,7 +30,7 @@ class ValidPollerModel(db.Model):
         poll = PollModel.find_by_id(poll_id)
         if poll.is_public == True:
             return False
-
+        return False
     @classmethod
     def can_vote(cls, user_id, poll_id):
         can_vote = cls.query.filter_by(user_id=user_id, poll_id=poll_id).first()

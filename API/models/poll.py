@@ -16,14 +16,13 @@ class PollModel(db.Model):
 
     candidates = db.relationship("CandidateModel",backref="poll")
 
+    complaints = db.relationship("ComplaintModel",backref="complaint")
+
     owner_id = db.Column(db.Integer, db.ForeignKey('users._id'))
 
     # user = db.relationship('UserModel')
 
-    # def __init__(self, name, price, store_id):
-    #     self.name = name
-    #     self.price = price
-    #     self.store_id = store_id
+    
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
@@ -43,24 +42,14 @@ class PollModel(db.Model):
         return {'polls': list(map(lambda x: x.json(), polls))}
 
 
-    @classmethod
-    def search_by_keyword(cls, keyword):
-        houses = cls.query.filter_by(location_word=keyword).all()
+    # @classmethod
+    # def search_by_keyword(cls, keyword):
+    #     houses = cls.query.filter_by(location_word=keyword).all()
                 # print(found_houses)
         # for house in found_houses:
         #     print("house.location_word")
-        return {'houses': list(map(lambda x: x.json(), houses))}
+        # return {'houses': list(map(lambda x: x.json(), houses))}
 
-
-    @classmethod
-    def housesWithInRadius(cls, distance, lon, lat):
-        DISTANCE = distance #100 meters
-        houseWithIn = db.session.execute("select * from houses where ST_DWithin(houses.coordinates,ST_MakePoint(9.0436513,38.7590634)::geography,1000);")
-        # houseWithIn = db.session.query(cls).filter(func.ST_DWithin(cls.coordinates, cast(func.ST_SetSRID(func.ST_MakePoint(float(lon), float(lat)), 1609), Geography), DISTANCE)).all()
-        for house in houseWithIn:
-            print(house)
-        # print(houseWithIn)
-        return houseWithIn
 
 
 
@@ -74,6 +63,7 @@ class PollModel(db.Model):
             'description': self.description,
             'starting_date': self.starting_date,
             'deadline': self.deadline,
+            "owner_id": self.owner_id,
             'candidates': list(map(lambda x: x.json(), self.candidates)),
-            "owner_id": self.owner_id
+            "complaints": list(map(lambda x: x.json(), self.complaints))
          }

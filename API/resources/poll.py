@@ -85,6 +85,14 @@ class PollList(Resource):
 
         current_user = UserModel.find_by_id(int(get_jwt_identity()))
         new_poll_secret_key = randint(100000, 999999)
+
+        repeated = True
+        while(repeated):
+            while(PollModel.query.filter_by(secret_key=new_poll_secret_key).first()):
+                new_poll_secret_key = randint(100000, 999999)
+                
+            repeated = False
+
         new_poll = PollModel(**data,owner=current_user, poll_secret_key=new_poll_secret_key)
 
 

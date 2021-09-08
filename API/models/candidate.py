@@ -45,7 +45,7 @@ class CandidateModel(db.Model):
 
         return {
             "status": "failed",
-            "message": "you can not vote"
+            "message": "you have already voted or this is private vote"
         }
 
     @classmethod

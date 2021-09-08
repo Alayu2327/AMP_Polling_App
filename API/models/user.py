@@ -9,6 +9,7 @@ class UserModel(db.Model):
     email = db.Column(db.String(80))
     password = db.Column(db.String(80))
     phone_number = db.Column(db.String(20))
+
     polls = db.relationship("PollModel",backref="owner")
     
 
@@ -44,3 +45,5 @@ class UserModel(db.Model):
             "phone_number" :self.phone_number,
             "polls": list(map(lambda x: x.json(), self.polls))
         }
+
+        

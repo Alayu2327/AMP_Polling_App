@@ -7,7 +7,7 @@ from models.user import UserModel
 import json
 from flask_jwt_extended import jwt_required
 
- 
+
 class CanVote(Resource):
 
     # @jwt_required()
@@ -31,7 +31,22 @@ class HasVoted(Resource):
         
 class PrivateVoter(Resource):
     def post(self):
+            parser = reqparse.RequestParser()
+        
+
+            parser.add_argument('poll_id', type=int, required=True, help="A poll id is required to register private voter!!")
+            parser.add_argument('user_id', type=int, required=True, help="A user id is required to register private voter!!")
+
+            # parser.add_argument('image_cover')
+
+            data = parser.parse_args()
+            print({**data})
+            poll_id = data["poll_id"]
+            user_id = data["user_id"]
+
             valid_poller_obj = ValidPollerModel(poll_id=poll_id, user_id=user_id, has_voted=False)
             valid_poller_obj.save_to_db()  
-                  
+
             return valid_poller_obj.json()
+
+            
