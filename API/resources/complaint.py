@@ -67,7 +67,7 @@ class ComplaintList(Resource):
 
     def get(self):
         return {'complaints': list(map(lambda x: x.json(), ComplaintModel.query.all()))}
-    @jwt_required()
+#     @jwt_required()
     def post(self):
         parser = reqparse.RequestParser()
         
