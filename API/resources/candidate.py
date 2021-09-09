@@ -67,7 +67,7 @@ class CandidateList(Resource):
 
     def get(self):
         return {'candidates': list(map(lambda x: x.json(), CandidateModel.query.all()))}
-    @jwt_required()
+#     @jwt_required()
     def post(self):
         parser = reqparse.RequestParser()
         
@@ -102,7 +102,7 @@ class CandidateList(Resource):
 class GivePoll(Resource):
     parser = reqparse.RequestParser()
 
-    @jwt_required()
+#     @jwt_required()
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('candidate_id', type=int, required=True, help="A candidate id is required to vote!!")
