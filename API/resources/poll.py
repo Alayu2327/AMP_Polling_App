@@ -85,7 +85,7 @@ class PollList(Resource):
 
     def get(self):
         return {'polls': list(map(lambda x: x.json(), PollModel.query.all()))}
-    @jwt_required()
+#     @jwt_required()
     def post(self):
         parser = reqparse.RequestParser()
         
